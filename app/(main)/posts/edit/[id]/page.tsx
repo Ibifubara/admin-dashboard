@@ -28,15 +28,13 @@ const formSchema = z.object({
 })
 
 interface PostEditPageProps {
-    params: {
-        id: string
-    }
+    params: {id: string} | Promise<{ id: string }>
 }
 
-const PostEditPage = ({ params }: PostEditPageProps) => {
+const PostEditPage = async({ params }: PostEditPageProps) => {
     
-
-    const post = posts.find((post) => post.id === params.id)
+    const resolvedParams = await params
+    const post = posts.find((post) => post.id === resolvedParams.id)
 
     const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
